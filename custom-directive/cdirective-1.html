@@ -1,0 +1,59 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Transclution Scopes</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp',[]).controller('MyController', function ($scope){
+            $scope.rootMsg = 'Angular World';
+            $scope.message = 'Hello World';
+            $scope.name = 'Rashmika';
+        }).directive('myDialog', function () {
+            return {
+                restrict: 'E',
+                transclude: true,
+                scope: {},
+                templateUrl: 'my-dialog.html',
+                link: function (scope){
+                    scope.name = 'BP'; //the name does not change to BP, as it uses the outer scope, when using the isolated scope
+                }
+            };
+        }).directive('myDirective', function () {
+            return {
+                scope: {},
+                template: '<div>{{message}}</div>',
+                link: function (scope, element){
+                    scope.message = 'Hello World from myDirective';
+                }
+            };
+        });
+
+        /*.directive('myDialog', function () {
+            return {
+                restrict: 'E',
+                transclude: true,
+                templateUrl: 'my-dialog.html',
+                link: function (scope){
+                    scope.name = 'BP';  //name changes in this context
+                }
+            };
+        })*/
+    </script>
+</head>
+<body>
+        <!--<div ng-controller="MyController">
+            {{rootMsg}}
+            {{message}}
+            <my-dialog>Check out the contents, {{name}}!</my-dialog>
+            <my-directive></my-directive>
+
+        </div>-->
+        <div ng-controller="MyController">
+            {{rootMsg}}
+            {{message}}
+            <my-directive></my-directive>
+            <my-dialog>Check out the contents, {{name}}!</my-dialog>
+        </div>
+</body>
+</html>

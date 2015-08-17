@@ -1,0 +1,44 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div.people div {
+            padding: 10px;
+            border: solid 2px blue;
+        }
+    </style>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        var myApp = angular.module('myApp',[]).controller('MyController', function ($scope){
+            this.timeOfDay = 'Morning';
+            this.name = 'Aditya';
+        });
+        myApp.controller('ChildController', function ($scope){
+            this.name = 'Jui';
+        });
+        myApp.controller('GrandChildController', function ($scope){
+            this.timeOfDay = 'Evening';
+            this.name = 'Nina';
+        });
+    </script>
+</head>
+<body>
+    <div class='people'>
+        <div ng-controller="MyController as cont">
+            <p>Good {{cont.timeOfDay}}, {{cont.name}}!</p>
+
+            <div ng-controller="ChildController as childCont">
+                <p>Good {{cont.timeOfDay}}, {{childCont.name}}!</p>
+                <p>Good {{cont.timeOfDay}}, {{cont.name}}!</p>
+                <div ng-controller="GrandChildController as grandchildCont">
+                    <p>Good {{grandchildCont.timeOfDay}}, {{grandchildCont.name}}!</p>
+                    <p>Good {{cont.timeOfDay}}, {{childCont.name}}!</p>
+                    <p>Good {{grandchildCont.timeOfDay}}, {{cont.name}}!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

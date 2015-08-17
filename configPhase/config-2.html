@@ -1,0 +1,41 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Only Providers</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        //Just playing round with what can be done in config phase - created a value, factory, directive, filter (using providers) and used them in the controller
+        angular.module('myApp',[]).controller('MyController', function ($scope, a, myFactory, $filter){
+            $scope.message = 'Hello';
+            $filter('myFilter')();
+            $scope.myValue = a;
+            $scope.myFactoryVar = myFactory;
+            //$scope.msg = 'hello filter';
+        }).config(function($provide, $compileProvider, $filterProvider){
+            $provide.value('a', 123);
+            $provide.factory('myFactory', function (){
+                return 246;
+            });
+            $compileProvider.directive('myDirective', function () {
+                return {
+                    template: '<div>Directive Created in Config Phase</div>'
+                }
+            });
+            $filterProvider.register('myFilter', function (){
+                return function (){
+                    return 'Some filtered content from config';
+                };
+            });
+        });
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            {{message | myFilter}}
+            {{myValue}}
+            {{myFactoryVar}}
+            <div my-directive></div>
+        </div>
+</body>
+</html>

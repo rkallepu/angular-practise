@@ -1,0 +1,28 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp',[]).controller('MyController', function ($scope){
+            $scope.spice = 'very';
+            $scope.customSpice = 'Wasabi';
+            $scope.chiliSpicy = function (spiceType) {
+              $scope.spice = spiceType;
+            };
+            $scope.jalapenoSpicy = function (spiceType) {
+                $scope.spice = spiceType;
+            };
+        });
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            <input ng-model="customSpice">
+            <button ng-click="chiliSpicy('chili')">Chili</button>
+            <button ng-click="jalapenoSpicy(customSpice)">Custom Spice</button>
+            <p>The food is {{spice}} spicy!</p>
+        </div>
+</body>
+</html>

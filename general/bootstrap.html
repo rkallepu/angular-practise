@@ -1,0 +1,30 @@
+<!Doctype html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp',[]).controller('MyController', function ($scope){
+            $scope.message = 'Hello';
+        });
+        angular.module('myAppTwo',[]).controller('SecondCont', function ($scope){
+            $scope.message = 'Hello from second controller';
+        });
+        document.addEventListener('DOMContentLoaded', function (){
+            angular.bootstrap(document.body, ['myApp']);
+            //angular.bootstrap(document.body.firstElementChild, ['myApp']);
+            angular.bootstrap(document.body.lastElementChild, ['myAppTwo']);
+        });
+
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            {{message}}
+        </div>
+        <div ng-controller="SecondCont">
+            {{message}}
+        </div>
+</body>
+</html>

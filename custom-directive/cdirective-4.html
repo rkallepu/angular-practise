@@ -1,0 +1,53 @@
+<!Doctype html>
+<html ng-app="dragModule">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Custom Directive - Adding Event Handlers to DOM Element</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('dragModule', []).controller('MyController', function ($scope){
+            $scope.message = 'Hello Angular';
+        }).directive('myDraggable', ['$document', function($document) {
+            return {
+                link: function(scope, element, attr) {
+                    var startX = 0, startY = 0, x = 0, y = 0;
+                    element.css({
+                        position: 'relative',
+                        border: '1px solid red',
+                        backgroundColor: 'lightgrey',
+                        cursor: 'pointer'
+                    });
+                    element.on('mousedown', function(event) {
+                        // Prevent default dragging of selected content
+                        event.preventDefault();
+                        startX = event.pageX - x;
+                        startY = event.pageY - y;
+                        $document.on('mousemove', mousemove);
+                        $document.on('mouseup', mouseup);
+                    });
+
+                    function mousemove(event) {
+                        y = event.pageY - startY;
+                        x = event.pageX - startX;
+                        element.css({
+                            top: y + 'px',
+                            left:  x + 'px'
+                        });
+                    }
+
+                    function mouseup() {
+                        $document.off('mousemove', mousemove);
+                        $document.off('mouseup', mouseup);
+                    }
+                }
+            };
+        }]);
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            {{message}}
+            <span my-draggable>Drag ME</span>
+        </div>
+</body>
+</html>

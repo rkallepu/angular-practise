@@ -1,0 +1,34 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>$digest and rootscope</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        //$digest processes all the watchers of the current scope and its children
+        //Programmer has to handle exceptions ($exceptionHandler is not called)
+        angular.module('myApp',[]).controller('MyController', function ($scope, $rootScope){
+            $rootScope.general = 'Hello rootscope';
+            $scope.message = 'Hello';
+            $scope.name = 'Rashmika';
+        }).controller('childController', function ($scope, $rootScope){
+            console.log($scope.name);
+            if($scope.name === 'Rashmika'){
+                //$rootScope.general = 'Before the digest loop is called';
+                $scope.$digest(); //throws error $apply already in progress
+                //$rootScope.general = 'After the digest loop is called';
+            }
+        });
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            <p>{{message}}</p>
+            <p>{{name}}</p>
+            <p>{{general}}</p>
+            <div ng-controller="childController">
+                <input type="text" ng-model="name"/>
+            </div>
+        </div>
+</body>
+</html>

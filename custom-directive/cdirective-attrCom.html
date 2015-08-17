@@ -1,0 +1,56 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Custom Directive Communication using attributes</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp',[]).controller('MyController', function ($scope){
+            $scope.message = 'Hello';
+            console.log($scope.name);
+            console.log($scope.address);
+            console.log($scope.city);
+        }).directive('myDirective', function (){
+            return {
+                restrict: "A",
+                link: function (scope, Element, attr, controller){
+                    console.log('hi myDirective');
+                    console.log(attr);
+                    attr.$set('ngModel', 'Varun');
+
+                    attr.$observe('ngModel', function (value){
+                       console.log('ngModel has changed value to ' + value);
+                        scope.name = value;
+                    });
+
+                }
+            }
+        }).directive('myDirectiveOne', function (){
+            return {
+                restrict: "A",
+                link: function (scope, Element, attr){
+                    console.log('hi myDirectiveOne');
+                    console.log(attr);
+                }
+            }
+        }).directive('myDirectiveTwo', function (){
+            return {
+                restrict: "A",
+                link: function (scope, Element, attr){
+                    console.log('hi myDirectiveTwo');
+                    console.log(attr);
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            {{message}}
+            <div><input type="text" my-directive="nameAttr" placeholder="Enter Name" ng-model="name"/>{{name}}</div>
+            <div><input type="text" my-directive="usernameAttr" placeholder="Enter Username" ng-model="username"/>{{username}}</div>
+            <div><input type="text" my-directive-one="address" placeholder="Enter Address Line 1" ng-model="address"/>{{address}}</div>
+            <div><input type="text" my-directive-two="city" placeholder="Enter city" ng-model="city"/>{{city}}</div>
+        </div>
+</body>
+</html>

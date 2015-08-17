@@ -1,0 +1,30 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Configuration module</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp',[]).controller('MyController', function ($scope, $rootScope, messageConst){
+            $scope.message = messageConst;
+            $scope.myvar = $rootScope.myvar;
+        }).config(function (messageConst){
+            //messageConst = messageConst + 'overriding from config phase';
+        }).run(function ($rootScope, messageConst){
+            $rootScope.myvar = messageConst + ' trying to change the constant from run phase';
+            $rootScope.name = 'Hello from run Phase';
+        }).constant('messageConst', 'Angular constant');
+        /*.config(function ($rootScope){
+        //Cannot inject $rootScope to the config phase - Only Providers and Constant allowed
+            $rootScope.name = 'Hello from configuration Phase'; //Can inject rootScope using interceptors
+        });*/
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            <div>Constant : {{message}}<div/>
+                    <div>Variable on rootscope : {{myvar}}<div/>
+                    <div>Variable on rootscope accessed through child scope : {{name}}<div/>
+        </div>
+</body>
+</html>

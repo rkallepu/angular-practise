@@ -1,0 +1,44 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp',[]).controller('MyController', function ($scope){
+            $scope.message = angular.lowercase('HELLO'); //angular.uppercase
+            var values = {name: 'misko', gender: 'male', hobbies:{one:'dancing',two:'Zumba', three: {key1:{key2:'ooolaaalaaa'}}}};
+            var extObj = {dummy: 'sometext', key2: 'some other text'};
+            var log = [];
+            flattenObject(values);
+            function flattenObject(values){
+                angular.forEach(values, function(value, key) {
+                    console.log(key, value);
+                    if(angular.isObject(value)){
+                        flattenObject(value);
+                    }else{
+                        this.push(key + ': ' + value);
+                    }
+
+                }, log);
+            };
+            $scope.objExtended = angular.extend({}, values, extObj);
+            $scope.objMerged = angular.merge({}, values, extObj)
+            $scope.log = log;
+            $scope.msg = 'World..!!!';
+        });
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            {{message}}<span ng-bind="msg">{{msg}}</span>
+            <input type="text" ng-model="name" />
+            <div>{{name}}</div>
+            <ul>
+                <li ng-repeat="item in log">{{item}}</li>
+            </ul>
+            <div>{{objExtended}}</div>
+            <div>{{objMerged}}</div>
+        </div>
+</body>
+</html>

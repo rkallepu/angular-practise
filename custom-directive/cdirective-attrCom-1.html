@@ -1,0 +1,38 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Custom Directive - Attributes</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        /*changing the value of the input,
+        changes the attribute on my-directive and we can observe this change in the controller of the custom directive*/
+        angular.module('myApp',[]).controller('MyController', function ($scope){
+            $scope.message = 'Hello';
+            $scope.config = 'test';
+        }).directive('myDirective', function (){
+            return {
+                restrict: 'E',
+                template: '<div>My Directive</div>',
+                link: function(scope, iElement, iAttrs, controller) {
+                    //here it will be access as scope.config
+                    console.log(scope.config);
+                },
+                controller: function($scope,$attrs) {
+                    //you could put a watch to detect a changes on config
+                    $attrs.$observe('config', function (newV) {
+                        console.log(newV);
+                    });
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            {{message}}
+            <input type="number" ng-model="config" ng-init="config=1;"/>
+            <my-directive config="{{config}}"></my-directive>
+        </div>
+</body>
+</html>

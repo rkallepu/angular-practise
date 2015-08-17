@@ -1,0 +1,80 @@
+<!Doctype html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Directives - Communication</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp',[]).controller('MyController', function ($scope){
+            $scope.message = 'Hello';
+        }).directive('myDirective', function (){
+            return {
+                restrict: 'E',
+                template: '<div>My Directive</div>',
+                scope: {}, //Using isolate scope
+                controller: function ($scope){
+                    $scope.words = [];
+
+                    this.sayHello = function (){
+                        $scope.words.push('Hello');
+                    };
+                    this.sayHi = function (){
+                        $scope.words.push('Hi');
+                    };
+                    this.sayHola = function (){
+                        $scope.words.push('Hola');
+                    };
+                },
+                link: function (scope, element, attrs, controller){
+                    element.bind('mouseenter', function () {
+                       console.log(scope.words);
+                        //controller.sayHello();
+                    });
+                }
+            };
+        }).directive('hello', function () {
+            return {
+                restrict: 'EA',
+                require: 'myDirective',
+                /*template: '<div>My Hello Directive</div>', multiple directives asking for a template on element*/
+                link: function (scope, element, attrs, myDirController){
+                    myDirController.sayHello();
+                }
+            }
+        }).directive('hi', function () {
+            return {
+                restrict: 'EA',
+                require: 'myDirective',
+                /*template: '<div>My Hi Directive</div>',*/
+                link: function (scope, element, attrs, myDirController){
+                    myDirController.sayHi();
+                }
+            }
+        }).directive('hola', function () {
+            return {
+                restrict: 'EA',
+                require: 'myDirective',
+                /*template: '<div>My Hola Directive</div>',*/
+                link: function (scope, element, attrs, myDirController){
+                    myDirController.sayHola();
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+        <div ng-controller="MyController">
+            {{message}}
+            <my-directive hello hi hola></my-directive>
+            <my-directive hi></my-directive>
+            <!--<my-directive> disable the template of my-directive and enable templates on others
+                <hello></hello> but myDirective cannot be found error
+                <hi></hi>
+                <hola></hola>
+            </my-directive>-->
+            <!--<hello></hello> required directive hello cant be found
+            <hi></hi>
+            <hola></hola>-->
+        </div>
+</body>
+</html>
